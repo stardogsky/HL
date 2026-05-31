@@ -1,0 +1,97 @@
+# Hyperliquid Docs Sync Log
+
+## Sync 2026-05-04T14:38:59+00:00
+
+- Filter: `about,hips,hypercore,trading,api`
+- Total: 85 pages
+- Added: 85
+- Updated: 0
+- Unchanged: 0
+- Failed: 0
+
+### Added
+- `/hyperliquid-docs/about-hyperliquid.md`
+- `/hyperliquid-docs/about-hyperliquid/hyperliquid-101-for-non-crypto-audiences.md`
+- `/hyperliquid-docs/about-hyperliquid/core-contributors.md`
+- `/hyperliquid-docs/hypercore.md`
+- `/hyperliquid-docs/hypercore/overview.md`
+- `/hyperliquid-docs/hypercore/bridge.md`
+- `/hyperliquid-docs/hypercore/api-servers.md`
+- `/hyperliquid-docs/hypercore/clearinghouse.md`
+- `/hyperliquid-docs/hypercore/oracle.md`
+- `/hyperliquid-docs/hypercore/order-book.md`
+- `/hyperliquid-docs/hypercore/staking.md`
+- `/hyperliquid-docs/hypercore/vaults.md`
+- `/hyperliquid-docs/hypercore/vaults/protocol-vaults.md`
+- `/hyperliquid-docs/hypercore/vaults/hypercore-vaults-legacy.md`
+- `/hyperliquid-docs/hypercore/vaults/for-vault-leaders-legacy.md`
+- `/hyperliquid-docs/hypercore/vaults/for-vault-depositors-legacy.md`
+- `/hyperliquid-docs/hypercore/multi-sig.md`
+- `/hyperliquid-docs/hypercore/permissionless-spot-quote-assets.md`
+- `/hyperliquid-docs/hypercore/aligned-quote-assets.md`
+- `/hyperliquid-docs/hyperliquid-improvement-proposals-hips.md`
+- `/hyperliquid-docs/hyperliquid-improvement-proposals-hips/hip-1-native-token-standard.md`
+- `/hyperliquid-docs/hyperliquid-improvement-proposals-hips/hip-2-hyperliquidity.md`
+- `/hyperliquid-docs/hyperliquid-improvement-proposals-hips/hip-3-builder-deployed-perpetuals.md`
+- `/hyperliquid-docs/hyperliquid-improvement-proposals-hips/hip-4-outcome-markets.md`
+- `/hyperliquid-docs/hyperliquid-improvement-proposals-hips/frontend-checks.md`
+- `/hyperliquid-docs/trading.md`
+- `/hyperliquid-docs/trading/fees.md`
+- `/hyperliquid-docs/trading/sub-accounts.md`
+- `/hyperliquid-docs/trading/builder-codes.md`
+- `/hyperliquid-docs/trading/perpetual-assets.md`
+- `/hyperliquid-docs/trading/contract-specifications.md`
+- `/hyperliquid-docs/trading/margining.md`
+- `/hyperliquid-docs/trading/account-abstraction-modes.md`
+- `/hyperliquid-docs/trading/portfolio-margin.md`
+- `/hyperliquid-docs/trading/margin-tiers.md`
+- `/hyperliquid-docs/trading/robust-price-indices.md`
+- `/hyperliquid-docs/trading/liquidations.md`
+- `/hyperliquid-docs/trading/auto-deleveraging.md`
+- `/hyperliquid-docs/trading/funding.md`
+- `/hyperliquid-docs/trading/order-book.md`
+- `/hyperliquid-docs/trading/order-types.md`
+- `/hyperliquid-docs/trading/take-profit-and-stop-loss-orders-tp-sl.md`
+- `/hyperliquid-docs/trading/entry-price-and-pnl.md`
+- `/hyperliquid-docs/trading/self-trade-prevention.md`
+- `/hyperliquid-docs/trading/index-perpetual-contracts.md`
+- `/hyperliquid-docs/trading/uniswap-perpetuals.md`
+- `/hyperliquid-docs/trading/hyperps.md`
+- `/hyperliquid-docs/trading/delisting.md`
+- `/hyperliquid-docs/trading/market-making.md`
+- `/hyperliquid-docs/trading/portfolio-graphs.md`
+- `/hyperliquid-docs/trading/miscellaneous-ui.md`
+- `/hyperliquid-docs/for-developers/api.md`
+- `/hyperliquid-docs/for-developers/api/notation.md`
+- `/hyperliquid-docs/for-developers/api/asset-ids.md`
+- `/hyperliquid-docs/for-developers/api/tick-and-lot-size.md`
+- `/hyperliquid-docs/for-developers/api/nonces-and-api-wallets.md`
+- `/hyperliquid-docs/for-developers/api/info-endpoint.md`
+- `/hyperliquid-docs/for-developers/api/info-endpoint/perpetuals.md`
+- `/hyperliquid-docs/for-developers/api/info-endpoint/spot.md`
+- `/hyperliquid-docs/for-developers/api/exchange-endpoint.md`
+- `/hyperliquid-docs/for-developers/api/websocket.md`
+- `/hyperliquid-docs/for-developers/api/websocket/subscriptions.md`
+- `/hyperliquid-docs/for-developers/api/websocket/post-requests.md`
+- `/hyperliquid-docs/for-developers/api/websocket/timeouts-and-heartbeats.md`
+- `/hyperliquid-docs/for-developers/api/error-responses.md`
+- `/hyperliquid-docs/for-developers/api/signing.md`
+- `/hyperliquid-docs/for-developers/api/rate-limits-and-user-limits.md`
+- `/hyperliquid-docs/for-developers/api/activation-gas-fee.md`
+- `/hyperliquid-docs/for-developers/api/priority-fees.md`
+- `/hyperliquid-docs/for-developers/api/optimizing-latency.md`
+- `/hyperliquid-docs/for-developers/api/bridge2.md`
+- `/hyperliquid-docs/for-developers/api/deploying-hip-1-and-hip-2-assets.md`
+- `/hyperliquid-docs/for-developers/api/hip-3-deployer-actions.md`
+- `/hyperliquid-docs/for-developers/api/hip-3-deployer-actions-1.md`
+- `/hyperliquid-docs/for-developers/hyperevm.md`
+- `/hyperliquid-docs/for-developers/hyperevm/dual-block-architecture.md`
+- `/hyperliquid-docs/for-developers/hyperevm/raw-hyperevm-block-data.md`
+- `/hyperliquid-docs/for-developers/hyperevm/interacting-with-hypercore.md`
+- `/hyperliquid-docs/for-developers/hyperevm/hypercore-less-than-greater-than-hyperevm-transfers.md`
+- `/hyperliquid-docs/for-developers/hyperevm/interaction-timings.md`
+- `/hyperliquid-docs/for-developers/hyperevm/wrapped-hype.md`
+- `/hyperliquid-docs/for-developers/hyperevm/json-rpc.md`
+- `/hyperliquid-docs/for-developers/nodes.md`
+- `/hyperliquid-docs/for-developers/nodes/l1-data-schemas.md`
+- `/hyperliquid-docs/for-developers/nodes/foundation-non-validating-node.md`

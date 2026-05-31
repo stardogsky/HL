@@ -1,0 +1,24 @@
+{
+  "ts": 1779125679.2195597,
+  "iso": "2026-05-18T17:34:39.219563+00:00",
+  "network": "mainnet",
+  "phase": "STEADY",
+  "current_outcome_id": 60,
+  "current_slug": "hl-btc-1d-76885-20260519-0600",
+  "seconds_to_expiry": 44720.78041601181,
+  "last_book_msg_ts": 1779125679.1271734,
+  "seconds_since_last_book": 0.09238624572753906,
+  "last_btc_price": 76613.57,
+  "stats": {
+    "ob_yes": 275163,
+    "ob_no": 275164,
+    "tr_yes": 126938,
+    "tr_no": 126939,
+    "mi": 149757,
+    "btc": 119415,
+    "switches": 3,
+    "watchdog_alarms": 0,
+    "forced_rediscoveries": 0
+  },
+  "uptime_sec": 149949.5144047737
+}

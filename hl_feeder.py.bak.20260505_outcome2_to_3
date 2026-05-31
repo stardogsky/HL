@@ -1,0 +1,432 @@
+#!/usr/bin/env python3
+"""
+hl_feeder.py — Hyperliquid → ZMQ Feeder
+
+Reads HL collector JSONL files, converts to Polymarket-compatible
+ZMQ message format, publishes on tcp://*:5575.
+
+This allows running the existing Predator bot (main.py + grid_strategy)
+on HL data without modifying any production code.
+
+Bot config to use this feeder:
+    data_source: zmq://127.0.0.1:5575
+
+Usage:
+    python3 ~/HL/hl_feeder.py             # mainnet
+    python3 ~/HL/hl_feeder.py --testnet
+"""
+import asyncio
+import json
+import time
+import sys
+import logging
+from pathlib import Path
+from datetime import datetime, timezone
+import zmq
+import zmq.asyncio
+import aiohttp
+
+# ─── Config ─────────────────────────────────────────────────────────────
+DATA_ROOT = Path.home() / "HL" / "data" / "raw"
+ZMQ_BIND = "tcp://*:5575"
+BINANCE_URL = "https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT"
+
+# Mainnet outcome 2 (BTC daily): YES=#20, NO=#21
+# When new outcomes appear after settlement, edit these.
+OUTCOME_ID = 2
+YES_TOKEN_ID = str(OUTCOME_ID * 10)         # "20"
+NO_TOKEN_ID = str(OUTCOME_ID * 10 + 1)      # "21"
+YES_FILE_PREFIX = f"book_h{YES_TOKEN_ID}_"  # book_h20_
+NO_FILE_PREFIX = f"book_h{NO_TOKEN_ID}_"    # book_h21_
+YES_TRADES_PREFIX = f"trades_h{YES_TOKEN_ID}_"
+NO_TRADES_PREFIX = f"trades_h{NO_TOKEN_ID}_"
+
+# ─── Logging ────────────────────────────────────────────────────────────
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[logging.StreamHandler(sys.stdout)],
+)
+logger = logging.getLogger('hl_feeder')
+
+
+# ════════════════════════════════════════════════════════════════════════
+# File tailer — yields new lines from JSONL files as they arrive
+# ════════════════════════════════════════════════════════════════════════
+class JsonlTailer:
+    def __init__(self, path: Path):
+        self.path = path
+        self.position = 0
+
+    def reset_to_end(self):
+        if self.path and self.path.exists():
+            self.position = self.path.stat().st_size
+
+    async def get_new(self) -> list[dict]:
+        if not self.path or not self.path.exists():
+            return []
+        try:
+            with open(self.path, 'r') as f:
+                f.seek(self.position)
+                data = f.read()
+                self.position = f.tell()
+            if not data:
+                return []
+            results = []
+            for line in data.strip().split('\n'):
+                if line:
+                    try:
+                        results.append(json.loads(line))
+                    except json.JSONDecodeError:
+                        continue
+            return results
+        except Exception as e:
+            logger.warning(f"Tailer error on {self.path.name}: {e}")
+            return []
+
+
+# ════════════════════════════════════════════════════════════════════════
+# Format conversion — HL → Polymarket-compatible
+# ════════════════════════════════════════════════════════════════════════
+
+def convert_orderbook(hl_msg: dict, is_yes: bool, token_id: str) -> dict:
+    """HL book → orderbook message for ZmqMarketSubscriber."""
+    return {
+        'asset_id': token_id,
+        'is_yes': is_yes,
+        'bids': [
+            {'price': str(level.get('px', 0)), 'size': str(level.get('sz', 0))}
+            for level in hl_msg.get('bids', [])
+        ],
+        'asks': [
+            {'price': str(level.get('px', 0)), 'size': str(level.get('sz', 0))}
+            for level in hl_msg.get('asks', [])
+        ],
+        'timestamp': hl_msg.get('ts_local', time.time()),
+        # Extra HL telemetry (ignored by bridge but useful for diagnosis)
+        'hl_coin': hl_msg.get('coin'),
+        'hl_latency_ms': hl_msg.get('latency_ms', 0),
+    }
+
+
+def convert_trade(hl_msg: dict, is_yes: bool) -> dict:
+    """HL trade → trade message for ZmqMarketSubscriber.
+    HL side: 'A' = ask hit (taker buy), 'B' = bid hit (taker sell).
+    """
+    side_map = {'A': 'BUY', 'B': 'SELL'}
+    return {
+        'price': float(hl_msg.get('px', 0)),
+        'size': float(hl_msg.get('sz', 0)),
+        'side': side_map.get(hl_msg.get('side', 'A'), 'BUY'),
+        'is_yes': is_yes,
+        'timestamp': hl_msg.get('ts_local', time.time()),
+        # Polymarket-shaped fields
+        'asset': 'BTC',
+        'maker_address': hl_msg.get('seller', '') or '',
+        # HL-specific (preserved for future analysis — bridge ignores)
+        'hl_buyer': hl_msg.get('buyer'),
+        'hl_seller': hl_msg.get('seller'),
+        'hl_tid': hl_msg.get('tid'),
+    }
+
+
+def parse_outcome_meta(meta_msg: dict, ob_count: int, trade_count: int) -> dict | None:
+    """HL outcome_meta → market_info message + extra metadata."""
+    outcomes = meta_msg.get('outcomes', [])
+    if not outcomes:
+        return None
+    outcome = outcomes[0]
+    desc = outcome.get('description', '')
+    parsed = {}
+    for part in desc.split('|'):
+        if ':' in part:
+            k, v = part.split(':', 1)
+            parsed[k.strip()] = v.strip()
+
+    try:
+        target = float(parsed.get('targetPrice', 0))
+    except ValueError:
+        target = 0.0
+
+    expiry_ts = 0
+    try:
+        expiry_dt = datetime.strptime(
+            parsed.get('expiry', ''), '%Y%m%d-%H%M'
+        ).replace(tzinfo=timezone.utc)
+        expiry_ts = int(expiry_dt.timestamp())
+    except ValueError:
+        pass
+
+    period = parsed.get('period', '1d')
+    duration_map = {'1d': 86400, '1h': 3600, '15m': 900, '15min': 900}
+    duration_sec = duration_map.get(period, 86400)
+
+    underlying = parsed.get('underlying', 'UNKNOWN')
+    outcome_id = outcome.get('outcome', OUTCOME_ID)
+
+    slug = f"hl-{underlying.lower()}-{period}-{int(target)}-{parsed.get('expiry', '')}"
+    now_ts = int(time.time())
+
+    return {
+        'slug': slug,
+        'condition_id': f"hl-outcome-{outcome_id}",
+        'yes_token_id': YES_TOKEN_ID,
+        'no_token_id': NO_TOKEN_ID,
+        'window_timestamp': expiry_ts - duration_sec,
+        'window_end': expiry_ts,
+        'time_remaining_sec': max(0, expiry_ts - now_ts),
+        'transition_state': 'ACTIVE' if expiry_ts > now_ts else 'EXPIRED',
+        'updates_count': ob_count,
+        'trades_count': trade_count,
+        # Extra (bridge ignores but useful)
+        'strike_price': target,
+        'underlying': underlying,
+    }
+
+
+# ════════════════════════════════════════════════════════════════════════
+# Main feeder
+# ════════════════════════════════════════════════════════════════════════
+class HLFeeder:
+    def __init__(self, network: str = 'mainnet'):
+        self.network = network
+        self.running = False
+
+        self.ctx = zmq.asyncio.Context()
+        self.pub = self.ctx.socket(zmq.PUB)
+        self.pub.setsockopt(zmq.SNDHWM, 5000)
+        self.pub.setsockopt(zmq.LINGER, 0)
+        self.pub.bind(ZMQ_BIND)
+
+        self.tailers: dict[str, JsonlTailer] = {}
+
+        self.stats = {
+            'ob_yes': 0, 'ob_no': 0,
+            'tr_yes': 0, 'tr_no': 0,
+            'mi': 0, 'btc': 0,
+        }
+        self.last_btc_price = 0.0
+        self.active_slug: str | None = None
+
+    async def publish(self, msg_type: str, data: dict, stat_key: str | None = None):
+        try:
+            payload = json.dumps({"type": msg_type, "data": data}, default=str)
+            await self.pub.send_string(payload, flags=1)  # NOBLOCK
+            if stat_key:
+                self.stats[stat_key] = self.stats.get(stat_key, 0) + 1
+        except Exception as e:
+            logger.warning(f"publish {msg_type} error: {e}")
+
+    def _today_dir(self) -> Path:
+        return DATA_ROOT / self.network / datetime.now(timezone.utc).strftime("%Y-%m-%d")
+
+    def _latest_file(self, prefix: str) -> Path | None:
+        base = self._today_dir()
+        if not base.exists():
+            return None
+        files = sorted(base.glob(f"{prefix}*.jsonl"), key=lambda p: p.stat().st_mtime)
+        return files[-1] if files else None
+
+    def discover_files(self) -> bool:
+        """Find/refresh tailers for active hour files. Returns True if all ok."""
+        targets = {
+            'book_yes': YES_FILE_PREFIX,
+            'book_no': NO_FILE_PREFIX,
+            'trades_yes': YES_TRADES_PREFIX,
+            'trades_no': NO_TRADES_PREFIX,
+            'meta': 'outcome_meta_',
+        }
+        all_ok = True
+        for key, prefix in targets.items():
+            path = self._latest_file(prefix)
+            if path is None:
+                logger.warning(f"⚠️  no file for {key} (prefix '{prefix}')")
+                all_ok = False
+                continue
+            existing = self.tailers.get(key)
+            if not existing or existing.path != path:
+                t = JsonlTailer(path)
+                t.reset_to_end()  # skip historical, get only new lines
+                self.tailers[key] = t
+                logger.info(f"📂 [{key}] {path.name}")
+        return all_ok
+
+    async def book_loop(self, side: str):
+        is_yes = (side == 'yes')
+        key = f'book_{side}'
+        token_id = YES_TOKEN_ID if is_yes else NO_TOKEN_ID
+        stat = 'ob_yes' if is_yes else 'ob_no'
+        while self.running:
+            try:
+                t = self.tailers.get(key)
+                if t:
+                    for hl in await t.get_new():
+                        await self.publish('orderbook',
+                                           convert_orderbook(hl, is_yes, token_id),
+                                           stat)
+                await asyncio.sleep(0.05)  # 20Hz
+            except asyncio.CancelledError:
+                break
+            except Exception as e:
+                logger.error(f"book_loop({side}): {e}")
+                await asyncio.sleep(1)
+
+    async def trades_loop(self, side: str):
+        is_yes = (side == 'yes')
+        key = f'trades_{side}'
+        stat = 'tr_yes' if is_yes else 'tr_no'
+        while self.running:
+            try:
+                t = self.tailers.get(key)
+                if t:
+                    for hl in await t.get_new():
+                        await self.publish('trade', convert_trade(hl, is_yes), stat)
+                await asyncio.sleep(0.1)  # 10Hz
+            except asyncio.CancelledError:
+                break
+            except Exception as e:
+                logger.error(f"trades_loop({side}): {e}")
+                await asyncio.sleep(1)
+
+    async def market_info_loop(self):
+        """Read outcome_meta tail every second, broadcast as market_info."""
+        while self.running:
+            try:
+                t = self.tailers.get('meta')
+                if t and t.path and t.path.exists():
+                    # Read last line via direct seek (don't increment position)
+                    with open(t.path, 'rb') as f:
+                        f.seek(0, 2)
+                        size = f.tell()
+                        f.seek(max(0, size - 8192))
+                        data = f.read().decode('utf-8', errors='ignore')
+                        lines = [l for l in data.strip().split('\n') if l]
+                        if lines:
+                            try:
+                                meta = json.loads(lines[-1])
+                                ob_total = self.stats['ob_yes'] + self.stats['ob_no']
+                                tr_total = self.stats['tr_yes'] + self.stats['tr_no']
+                                mi = parse_outcome_meta(meta, ob_total, tr_total)
+                                if mi:
+                                    if mi['slug'] != self.active_slug:
+                                        self.active_slug = mi['slug']
+                                        logger.info(
+                                            f"🎯 Active market: {mi['slug']} | "
+                                            f"strike=${mi['strike_price']:,.0f} | "
+                                            f"expires in {mi['time_remaining_sec']}s"
+                                        )
+                                    await self.publish('market_info', mi, 'mi')
+                            except json.JSONDecodeError:
+                                pass
+                await asyncio.sleep(1.0)
+            except asyncio.CancelledError:
+                break
+            except Exception as e:
+                logger.error(f"market_info_loop: {e}")
+                await asyncio.sleep(2)
+
+    async def btc_loop(self):
+        """Fetch BTC from Binance, broadcast as btc_update at 1Hz."""
+        last = 0.0
+        while self.running:
+            try:
+                async with aiohttp.ClientSession() as sess:
+                    while self.running:
+                        try:
+                            async with sess.get(
+                                BINANCE_URL,
+                                timeout=aiohttp.ClientTimeout(total=3)
+                            ) as r:
+                                if r.status == 200:
+                                    d = await r.json()
+                                    px = float(d.get('price', 0))
+                                    if px > 0:
+                                        delta = ((px - last) / last * 100) if last > 0 else 0.0
+                                        last = px
+                                        self.last_btc_price = px
+                                        await self.publish('btc_update', {
+                                            'btc_price': px,
+                                            'btc_ts': time.time(),
+                                            'vol_ratio': 1.0,
+                                            'btc_delta': delta,
+                                            'gateway_ts': time.time(),
+                                        }, 'btc')
+                        except Exception:
+                            pass
+                        await asyncio.sleep(1.0)
+            except asyncio.CancelledError:
+                break
+            except Exception as e:
+                logger.error(f"btc_loop: {e}")
+                await asyncio.sleep(5)
+
+    async def heartbeat_loop(self):
+        while self.running:
+            await asyncio.sleep(30)
+            s = self.stats
+            logger.info(
+                f"💓 [FEEDER] OB Y/N: {s['ob_yes']}/{s['ob_no']} | "
+                f"TR Y/N: {s['tr_yes']}/{s['tr_no']} | "
+                f"MI: {s['mi']} | BTC: ${self.last_btc_price:,.0f} ({s['btc']})"
+            )
+
+    async def file_refresh_loop(self):
+        """Re-discover hourly files every minute (handles hour rollover)."""
+        while self.running:
+            await asyncio.sleep(60)
+            try:
+                self.discover_files()
+            except Exception as e:
+                logger.warning(f"file_refresh: {e}")
+
+    async def run(self):
+        self.running = True
+        logger.info(f"🚀 [FEEDER] Network: {self.network} | ZMQ: {ZMQ_BIND}")
+        logger.info(f"🚀 [FEEDER] Tracking outcome #{OUTCOME_ID} (YES={YES_TOKEN_ID}, NO={NO_TOKEN_ID})")
+
+        retries = 0
+        while not self.discover_files() and self.running:
+            retries += 1
+            logger.warning(f"Waiting for HL data files... ({retries})")
+            if retries > 12:
+                logger.error("HL files not found after 60s. Is hl_collector running?")
+                return
+            await asyncio.sleep(5)
+
+        tasks = [
+            asyncio.create_task(self.book_loop('yes')),
+            asyncio.create_task(self.book_loop('no')),
+            asyncio.create_task(self.trades_loop('yes')),
+            asyncio.create_task(self.trades_loop('no')),
+            asyncio.create_task(self.market_info_loop()),
+            asyncio.create_task(self.btc_loop()),
+            asyncio.create_task(self.heartbeat_loop()),
+            asyncio.create_task(self.file_refresh_loop()),
+        ]
+        try:
+            await asyncio.gather(*tasks)
+        except KeyboardInterrupt:
+            logger.info("🛑 KeyboardInterrupt — stopping...")
+        finally:
+            self.running = False
+            for t in tasks:
+                t.cancel()
+            try:
+                self.pub.close()
+                self.ctx.term()
+            except Exception:
+                pass
+            logger.info("👋 Stopped.")
+
+
+def main():
+    network = 'testnet' if '--testnet' in sys.argv else 'mainnet'
+    feeder = HLFeeder(network=network)
+    try:
+        asyncio.run(feeder.run())
+    except KeyboardInterrupt:
+        pass
+
+
+if __name__ == '__main__':
+    main()

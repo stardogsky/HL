@@ -1,0 +1,75 @@
+Source: /home/moltbot/gabagool
+Found 162 Python files
+
+Computing SHA256 hashes...
+
+============================================================
+IDENTICAL FILES (byte-for-byte)
+============================================================
+Groups: 1
+Total redundant copies: 13
+
+Hash e3b0c44298fc... (14 copies, 0 bytes, ~0 lines):
+  backtester/__init__.py
+  backtester/bridge/__init__.py
+  backtester/calibration/__init__.py
+  backtester/configs/__init__.py
+  backtester/core/__init__.py
+  backtester/daemon/__init__.py
+  backtester/models/__init__.py
+  backtester/optimizer/__init__.py
+  backtester/reporting/__init__.py
+  backtester/strategy/__init__.py
+  strategies/__init__.py
+  tbot_core/__init__.py
+  tbot_core/strategy/__init__.py
+  tbot_risk/__init__.py
+
+============================================================
+SAME-NAME FILES IN DIFFERENT DIRECTORIES
+============================================================
+(skipping __init__.py and byte-identical)
+Threshold for yellow: 85%
+
+Filenames with divergent content: 8
+
+### bot_selector.py (2 versions):
+  analysis/core/bot_selector.py (6 lines, 248 bytes)
+  tbot_integration/core/bot_selector.py (92 lines, 3,223 bytes)
+  Similarity: [ok] 3.2%
+
+### engine.py (2 versions):
+  backtester/core/engine.py (248 lines, 8,834 bytes)
+  tbot_core/engine.py (431 lines, 16,281 bytes)
+  Similarity: [ok] 1.9%
+
+### epoch_tracker.py (2 versions):
+  analysis/core/epoch_tracker.py (5 lines, 216 bytes)
+  tbot_integration/core/epoch_tracker.py (137 lines, 5,038 bytes)
+  Similarity: [ok] 3.3%
+
+### live_trading_bridge.py (2 versions):
+  strategies/gabagool/live_trading_bridge.py (1,045 lines, 48,992 bytes)
+  tbot_integration/live_trading_bridge.py (1,766 lines, 92,882 bytes)
+  Similarity: [ok] 37.5%
+
+### merge_probe.py (2 versions):
+  merge_probe.py (104 lines, 4,425 bytes)
+  scripts/merge_probe.py (89 lines, 3,605 bytes)
+  Similarity: [ok] 61.6%
+
+### metrics.py (2 versions):
+  analysis/core/metrics.py (11 lines, 454 bytes)
+  tbot_integration/core/metrics.py (525 lines, 20,021 bytes)
+  Similarity: [ok] 1.5%
+
+### parser.py (2 versions):
+  analysis/core/parser.py (9 lines, 445 bytes)
+  tbot_integration/core/parser.py (710 lines, 26,335 bytes)
+  Similarity: [ok] 1.2%
+
+### strategy_adapter.py (2 versions):
+  strategies/gabagool/strategy_adapter.py (2,320 lines, 106,484 bytes)
+  tbot_integration/strategy_adapter.py (2,330 lines, 107,042 bytes)
+  Similarity: [!!] 99.6%
+

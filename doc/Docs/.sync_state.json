@@ -1,0 +1,439 @@
+{
+  "runs": [
+    {
+      "ts": "2026-05-04T14:38:59+00:00",
+      "added": 85,
+      "updated": 0,
+      "unchanged": 0,
+      "failed": 0,
+      "filter": "about,hips,hypercore,trading,api"
+    }
+  ],
+  "files": {
+    "/hyperliquid-docs/about-hyperliquid.md": {
+      "hash": "b87c97505ff4",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "About Hyperliquid"
+    },
+    "/hyperliquid-docs/about-hyperliquid/hyperliquid-101-for-non-crypto-audiences.md": {
+      "hash": "15dde9ef44ee",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Hyperliquid 101 for non-crypto audiences"
+    },
+    "/hyperliquid-docs/about-hyperliquid/core-contributors.md": {
+      "hash": "d5ed2b37ebc1",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Core contributors"
+    },
+    "/hyperliquid-docs/hypercore.md": {
+      "hash": "d0664f690bdd",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "HyperCore"
+    },
+    "/hyperliquid-docs/hypercore/overview.md": {
+      "hash": "b66aab8ce04b",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Overview"
+    },
+    "/hyperliquid-docs/hypercore/bridge.md": {
+      "hash": "a8ea4b4b7ef9",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Bridge"
+    },
+    "/hyperliquid-docs/hypercore/api-servers.md": {
+      "hash": "484859a7fe4b",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "API servers"
+    },
+    "/hyperliquid-docs/hypercore/clearinghouse.md": {
+      "hash": "c7155b25a7f3",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Clearinghouse"
+    },
+    "/hyperliquid-docs/hypercore/oracle.md": {
+      "hash": "fa6993822bee",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Oracle"
+    },
+    "/hyperliquid-docs/hypercore/order-book.md": {
+      "hash": "5e23ec48076e",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Order book"
+    },
+    "/hyperliquid-docs/hypercore/staking.md": {
+      "hash": "01e8e90e26b1",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Staking"
+    },
+    "/hyperliquid-docs/hypercore/vaults.md": {
+      "hash": "9fd620f335a0",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Vaults"
+    },
+    "/hyperliquid-docs/hypercore/vaults/protocol-vaults.md": {
+      "hash": "35f2a28fd1d7",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Protocol vaults"
+    },
+    "/hyperliquid-docs/hypercore/vaults/hypercore-vaults-legacy.md": {
+      "hash": "0a4a750e024c",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "HyperCore vaults (legacy)"
+    },
+    "/hyperliquid-docs/hypercore/vaults/for-vault-leaders-legacy.md": {
+      "hash": "47cd97defbc9",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "For vault leaders (legacy)"
+    },
+    "/hyperliquid-docs/hypercore/vaults/for-vault-depositors-legacy.md": {
+      "hash": "ffce6a342e50",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "For vault depositors (legacy)"
+    },
+    "/hyperliquid-docs/hypercore/multi-sig.md": {
+      "hash": "32e7c6410dfe",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Multi-sig"
+    },
+    "/hyperliquid-docs/hypercore/permissionless-spot-quote-assets.md": {
+      "hash": "e95738658489",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Permissionless spot quote assets"
+    },
+    "/hyperliquid-docs/hypercore/aligned-quote-assets.md": {
+      "hash": "34e18a5297cb",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Aligned quote assets"
+    },
+    "/hyperliquid-docs/hyperliquid-improvement-proposals-hips.md": {
+      "hash": "64e0e8501a7d",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Hyperliquid Improvement Proposals (HIPs)"
+    },
+    "/hyperliquid-docs/hyperliquid-improvement-proposals-hips/hip-1-native-token-standard.md": {
+      "hash": "3e201e76a09e",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "HIP-1: Native token standard"
+    },
+    "/hyperliquid-docs/hyperliquid-improvement-proposals-hips/hip-2-hyperliquidity.md": {
+      "hash": "14d1eeb68822",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "HIP-2: Hyperliquidity"
+    },
+    "/hyperliquid-docs/hyperliquid-improvement-proposals-hips/hip-3-builder-deployed-perpetuals.md": {
+      "hash": "4a7a02a7bf98",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "HIP-3: Builder-deployed perpetuals"
+    },
+    "/hyperliquid-docs/hyperliquid-improvement-proposals-hips/hip-4-outcome-markets.md": {
+      "hash": "869350b8fb96",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "HIP-4: Outcome markets"
+    },
+    "/hyperliquid-docs/hyperliquid-improvement-proposals-hips/frontend-checks.md": {
+      "hash": "97e699b0cc45",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Frontend checks"
+    },
+    "/hyperliquid-docs/trading.md": {
+      "hash": "dab6942296ef",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Trading"
+    },
+    "/hyperliquid-docs/trading/fees.md": {
+      "hash": "7373e33a804c",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Fees"
+    },
+    "/hyperliquid-docs/trading/sub-accounts.md": {
+      "hash": "9b85652363d2",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Sub-accounts"
+    },
+    "/hyperliquid-docs/trading/builder-codes.md": {
+      "hash": "73f8047dfb71",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Builder codes"
+    },
+    "/hyperliquid-docs/trading/perpetual-assets.md": {
+      "hash": "bc402485b8b9",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Perpetual assets"
+    },
+    "/hyperliquid-docs/trading/contract-specifications.md": {
+      "hash": "53f7e2922ec6",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Contract specifications"
+    },
+    "/hyperliquid-docs/trading/margining.md": {
+      "hash": "03d237cb8017",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Margining"
+    },
+    "/hyperliquid-docs/trading/account-abstraction-modes.md": {
+      "hash": "3dca85b204ae",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Account abstraction modes"
+    },
+    "/hyperliquid-docs/trading/portfolio-margin.md": {
+      "hash": "cd4ee55acb95",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Portfolio margin"
+    },
+    "/hyperliquid-docs/trading/margin-tiers.md": {
+      "hash": "23681a9b46f9",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Margin tiers"
+    },
+    "/hyperliquid-docs/trading/robust-price-indices.md": {
+      "hash": "7e5dbfb2e963",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Robust price indices"
+    },
+    "/hyperliquid-docs/trading/liquidations.md": {
+      "hash": "bbebbcd4e945",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Liquidations"
+    },
+    "/hyperliquid-docs/trading/auto-deleveraging.md": {
+      "hash": "33557c221f8d",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Auto-deleveraging"
+    },
+    "/hyperliquid-docs/trading/funding.md": {
+      "hash": "6f09d5083d4f",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Funding"
+    },
+    "/hyperliquid-docs/trading/order-book.md": {
+      "hash": "c9d856fed920",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Order book"
+    },
+    "/hyperliquid-docs/trading/order-types.md": {
+      "hash": "c6dc6c9608cd",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Order types"
+    },
+    "/hyperliquid-docs/trading/take-profit-and-stop-loss-orders-tp-sl.md": {
+      "hash": "031dcba8f262",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Take profit and stop loss orders (TP/SL)"
+    },
+    "/hyperliquid-docs/trading/entry-price-and-pnl.md": {
+      "hash": "d19883131992",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Entry price and pnl"
+    },
+    "/hyperliquid-docs/trading/self-trade-prevention.md": {
+      "hash": "4c9fdf017007",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Self-trade prevention"
+    },
+    "/hyperliquid-docs/trading/index-perpetual-contracts.md": {
+      "hash": "00ebd0d23320",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Index perpetual contracts"
+    },
+    "/hyperliquid-docs/trading/uniswap-perpetuals.md": {
+      "hash": "db442185c637",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Uniswap perpetuals"
+    },
+    "/hyperliquid-docs/trading/hyperps.md": {
+      "hash": "8ae76ccd768a",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Hyperps"
+    },
+    "/hyperliquid-docs/trading/delisting.md": {
+      "hash": "b7be9ab19718",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Delisting"
+    },
+    "/hyperliquid-docs/trading/market-making.md": {
+      "hash": "8a24f70b3240",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Market making"
+    },
+    "/hyperliquid-docs/trading/portfolio-graphs.md": {
+      "hash": "0734ca9916dc",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Portfolio graphs"
+    },
+    "/hyperliquid-docs/trading/miscellaneous-ui.md": {
+      "hash": "04225e946756",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Miscellaneous UI"
+    },
+    "/hyperliquid-docs/for-developers/api.md": {
+      "hash": "fadc4cc4deff",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "API"
+    },
+    "/hyperliquid-docs/for-developers/api/notation.md": {
+      "hash": "5d50e6aabdab",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Notation"
+    },
+    "/hyperliquid-docs/for-developers/api/asset-ids.md": {
+      "hash": "5dbeb872ce83",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Asset IDs"
+    },
+    "/hyperliquid-docs/for-developers/api/tick-and-lot-size.md": {
+      "hash": "a570f0810f52",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Tick and lot size"
+    },
+    "/hyperliquid-docs/for-developers/api/nonces-and-api-wallets.md": {
+      "hash": "41b200b452dd",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Nonces and API wallets"
+    },
+    "/hyperliquid-docs/for-developers/api/info-endpoint.md": {
+      "hash": "34c677910a0a",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Info endpoint"
+    },
+    "/hyperliquid-docs/for-developers/api/info-endpoint/perpetuals.md": {
+      "hash": "0a0c73e89029",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Perpetuals"
+    },
+    "/hyperliquid-docs/for-developers/api/info-endpoint/spot.md": {
+      "hash": "c8510a1bbc9f",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Spot"
+    },
+    "/hyperliquid-docs/for-developers/api/exchange-endpoint.md": {
+      "hash": "4b53a9167291",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Exchange endpoint"
+    },
+    "/hyperliquid-docs/for-developers/api/websocket.md": {
+      "hash": "532adfbf376e",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Websocket"
+    },
+    "/hyperliquid-docs/for-developers/api/websocket/subscriptions.md": {
+      "hash": "2c4db3cd7892",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Subscriptions"
+    },
+    "/hyperliquid-docs/for-developers/api/websocket/post-requests.md": {
+      "hash": "bc153042eef3",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Post requests"
+    },
+    "/hyperliquid-docs/for-developers/api/websocket/timeouts-and-heartbeats.md": {
+      "hash": "674845cd7d02",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Timeouts and heartbeats"
+    },
+    "/hyperliquid-docs/for-developers/api/error-responses.md": {
+      "hash": "c3d5529bb343",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Error responses"
+    },
+    "/hyperliquid-docs/for-developers/api/signing.md": {
+      "hash": "54ebb763f4f2",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Signing"
+    },
+    "/hyperliquid-docs/for-developers/api/rate-limits-and-user-limits.md": {
+      "hash": "101ba965ae53",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Rate limits and user limits"
+    },
+    "/hyperliquid-docs/for-developers/api/activation-gas-fee.md": {
+      "hash": "44ecab154280",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Activation gas fee"
+    },
+    "/hyperliquid-docs/for-developers/api/priority-fees.md": {
+      "hash": "efdc7ca4660c",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Priority fees"
+    },
+    "/hyperliquid-docs/for-developers/api/optimizing-latency.md": {
+      "hash": "ecdee5196298",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Optimizing latency"
+    },
+    "/hyperliquid-docs/for-developers/api/bridge2.md": {
+      "hash": "6972a43cc2d8",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Bridge2"
+    },
+    "/hyperliquid-docs/for-developers/api/deploying-hip-1-and-hip-2-assets.md": {
+      "hash": "66fe0338ddae",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Deploying HIP-1 and HIP-2 assets"
+    },
+    "/hyperliquid-docs/for-developers/api/hip-3-deployer-actions.md": {
+      "hash": "2f2c742e1852",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "HIP-3 deployer actions"
+    },
+    "/hyperliquid-docs/for-developers/api/hip-3-deployer-actions-1.md": {
+      "hash": "8792effcabd0",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "HIP-3 deployer actions"
+    },
+    "/hyperliquid-docs/for-developers/hyperevm.md": {
+      "hash": "a4cff4982e95",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "HyperEVM"
+    },
+    "/hyperliquid-docs/for-developers/hyperevm/dual-block-architecture.md": {
+      "hash": "80ab0d5a3726",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Dual-block architecture"
+    },
+    "/hyperliquid-docs/for-developers/hyperevm/raw-hyperevm-block-data.md": {
+      "hash": "ecf258762b5b",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Raw HyperEVM block data"
+    },
+    "/hyperliquid-docs/for-developers/hyperevm/interacting-with-hypercore.md": {
+      "hash": "5fe8c1e51391",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Interacting with HyperCore"
+    },
+    "/hyperliquid-docs/for-developers/hyperevm/hypercore-less-than-greater-than-hyperevm-transfers.md": {
+      "hash": "9a360654adee",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "HyperCore <> HyperEVM transfers"
+    },
+    "/hyperliquid-docs/for-developers/hyperevm/interaction-timings.md": {
+      "hash": "99eb4332d5f3",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Interaction timings"
+    },
+    "/hyperliquid-docs/for-developers/hyperevm/wrapped-hype.md": {
+      "hash": "b74127b7c2ac",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Wrapped HYPE"
+    },
+    "/hyperliquid-docs/for-developers/hyperevm/json-rpc.md": {
+      "hash": "b0380e450d38",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "JSON-RPC"
+    },
+    "/hyperliquid-docs/for-developers/nodes.md": {
+      "hash": "7c406001a83a",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Nodes"
+    },
+    "/hyperliquid-docs/for-developers/nodes/l1-data-schemas.md": {
+      "hash": "1f4bbe08564f",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "L1 data schemas"
+    },
+    "/hyperliquid-docs/for-developers/nodes/foundation-non-validating-node.md": {
+      "hash": "64e83dbd6b1b",
+      "synced_at": "2026-05-04T14:38:59+00:00",
+      "title": "Foundation non-validating node"
+    }
+  }
+}

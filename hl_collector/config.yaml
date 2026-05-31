@@ -1,0 +1,55 @@
+# HL Collector Configuration
+# Edit paths below if needed before deploy
+
+# Output directory (on VPS — make sure user has write permissions)
+output_base: "/home/moltbot/HL/data"
+
+# Networks to collect from
+networks:
+  mainnet:
+    enabled: true
+    ws_url: "wss://api.hyperliquid.xyz/ws"
+    rest_url: "https://api.hyperliquid.xyz/info"
+  testnet:
+    enabled: true
+    ws_url: "wss://api.hyperliquid-testnet.xyz/ws"
+    rest_url: "https://api.hyperliquid-testnet.xyz/info"
+
+# Outcome auto-discovery
+# Mode: "all_real" subscribes to all outcomes whose description has "class:priceBinary"
+# Mode: "explicit" only the outcome IDs in `explicit_outcome_ids`
+# Joke testnet outcomes (no priceBinary class) automatically excluded in "all_real"
+discovery:
+  mode: "all_real"
+  rediscover_interval_sec: 300  # re-scan outcomeMeta every 5 min for new instances
+
+# Polling intervals (seconds)
+polling:
+  all_mids_sec: 1.0           # mark price snapshots
+  outcome_meta_sec: 60.0      # detect new instance + targetPrice rotation
+  latency_probe_sec: 60.0     # latency measurement
+  spot_meta_sec: 300.0        # tick/lot metadata (stable)
+
+# Settlement watcher
+settlement:
+  pre_window_minutes: 30      # start tighter logging T-30min
+  critical_window_minutes: 5  # max-frequency mode T-5min
+  poll_during_critical_sec: 0.1   # 100ms polls during critical
+  post_window_minutes: 5      # detect new instance after settlement
+
+# Storage
+storage:
+  rotate_interval_sec: 3600   # rotate JSONL files every hour
+  gzip_after_close: true
+
+# WebSocket reconnect
+websocket:
+  reconnect_initial_delay_sec: 1.0
+  reconnect_max_delay_sec: 30.0
+  ping_interval_sec: 30.0
+  ping_timeout_sec: 10.0
+
+# Logging
+logging:
+  level: "INFO"
+  health_report_sec: 300       # print stats every 5 min
