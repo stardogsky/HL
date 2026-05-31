@@ -1,58 +1,58 @@
 # HL — Hyperliquid Outcome Markets
 
-Попытка запустить ту же стратегию market making на бинарных рынках Hyperliquid (HIP-4 outcome markets). Стратегия из `grid_poly_mm` работает без изменений — разница только в адаптере данных.
+An attempt to run the same market making strategy on Hyperliquid binary outcome markets (HIP-4). The strategy from `grid_poly_mm` runs unchanged — the only difference is the data adapter.
 
-Проект на паузе: Hyperliquid mainnet даёт только один рынок (BTC daily), стратегия нативна для 15-минутных рынков. Инфраструктура готова — ждёт появления подходящих рынков.
+Currently paused: Hyperliquid mainnet offers only one market (BTC daily), while the strategy is native to 15-minute markets. The infrastructure is ready and waiting for suitable markets to appear.
 
 ---
 
-## Что здесь есть
+## What is here
 
-**Коллектор** (`hl_collector/`) — daemon на pm2, подписывается на WebSocket HL, пишет JSONL по часам. Умеет переживать settlements без reconnect-шторма (решение задокументировано в `refactor_reports/`).
+**Collector** (`hl_collector/`) — pm2 daemon that subscribes to Hyperliquid WebSocket and writes JSONL files hourly. Handles settlements without reconnect storms (the solution is documented in `refactor_reports/`).
 
-**Фидер** (`hl_feeder.py`) — читает JSONL, конвертирует формат HL в формат Polymarket, публикует на ZMQ:5575. Бот из `grid_poly_mm` подключается к нему вместо стандартного gateway:5555.
+**Feeder** (`hl_feeder.py`) — reads JSONL, converts HL format to Polymarket-compatible format, publishes on ZMQ:5575. The `grid_poly_mm` bot connects to this instead of the standard gateway:5555.
 
 ```
-hl_collector → data/raw/<сеть>/<дата>/ → hl_feeder → ZMQ:5575 → grid_poly_mm бот
+hl_collector → data/raw/<network>/<date>/ → hl_feeder → ZMQ:5575 → grid_poly_mm bot
 ```
 
-**Документация** (`doc/`) — 85+ страниц синхронизированного gitbook Hyperliquid: спецификации HIP-4, API, формулы mark price, контрактные параметры.
+**Documentation** (`doc/`) — 85+ pages of synced Hyperliquid gitbook: HIP-4 specs, API reference, mark price formulas, contract parameters.
 
-**Архив рефакторинга** (`refactor_reports/`) — 12 фаз: от первого запуска до постмортема заморозки фидера. Читается как дневник проекта.
-
----
-
-## Результат
-
-Один бумажный прогон: +$1.79 за 16 часов на депозите $400. Стратегия работает на HL без перекалибровки. Обнаружена adverse selection в окне settlement (T-45min до экспирации).
-
-Основное препятствие — не код, а рынок: mainnet даёт только BTC daily, стратегия не оптимальна для 24-часового горизонта.
+**Refactor archive** (`refactor_reports/`) — 12 phases from first launch to feeder freeze postmortem. Reads like a project journal.
 
 ---
 
-## Если хочешь продолжить
+## Result
 
-`00_HL_START_HERE.md` — точка входа, полный чеклист возврата к проекту.
+One paper run: **+$1.79 over 16 hours** on a $400 deposit. The strategy executes correctly on HL without recalibration. Adverse selection observed in the settlement window (T-45min before expiry).
 
-`Calibration_Plan.md` — что нужно поменять в стратегии под daily рынки (оценка: 4-6 часов работы).
-
-`Auto_Discovery_Design.md` — готовый дизайн auto-discovery фидера, который не зависает на каждом settlement.
+The main obstacle is not the code but the market: mainnet only offers BTC daily, which is not optimal for a strategy built around 24-hour horizons.
 
 ---
 
-## Структура
+## If you want to continue
+
+`00_HL_START_HERE.md` — entry point, full checklist for resuming the project.
+
+`Calibration_Plan.md` — what needs to change in the strategy for daily markets (estimate: 4-6 hours of work).
+
+`Auto_Discovery_Design.md` — ready design for an auto-discovery feeder that does not freeze on every settlement.
+
+---
+
+## Structure
 
 ```
-hl_feeder.py              ← ZMQ адаптер (HL → PM-совместимый формат)
-hl_collector/             ← daemon сбора данных
-doc/                      ← документация Hyperliquid (gitbook sync)
-refactor_reports/         ← история 12 фаз рефакторинга
-data/raw/                 ← собранные JSONL данные
-Auto_Discovery_Design.md  ← дизайн auto-discovery (не реализован)
-Calibration_Plan.md       ← план калибровки под HL
-00_HL_START_HERE.md       ← точка входа при возврате к проекту
+hl_feeder.py              ← ZMQ adapter (HL → PM-compatible format)
+hl_collector/             ← data collection daemon
+doc/                      ← Hyperliquid documentation (gitbook sync)
+refactor_reports/         ← 12-phase refactor history
+data/raw/                 ← collected JSONL data
+Auto_Discovery_Design.md  ← auto-discovery design (not implemented)
+Calibration_Plan.md       ← calibration plan for HL
+00_HL_START_HERE.md       ← entry point when returning to the project
 ```
 
 ---
 
-Стратегия: [grid_poly_mm](https://github.com/stardogsky/grid_poly_mm)
+Strategy core: [grid_poly_mm](https://github.com/stardogsky/grid_poly_mm)
